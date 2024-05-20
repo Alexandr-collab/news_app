@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(
-                  child: Text(
-                      'Ошибка при загрузке данных: ${snapshot.error}')); // Отображаем сообщение об ошибке и информацию о причине
+                child: Text('Ошибка при загрузке данных: ${snapshot.error}'),
+              ); // Отображаем сообщение об ошибке и информацию о причине
             } else {
               // Отображаем виджет для списка новостей
               return snapshot.data != null
