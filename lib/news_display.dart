@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'NewsDetails.dart';
 import 'api_service.dart';
+import 'blog_display.dart';
+import 'app_info_widget.dart';
+import 'search_utils.dart';
 
 class NewsDisplay extends StatefulWidget {
   final List<Article> news;
@@ -31,12 +34,8 @@ class _NewsDisplayState extends State<NewsDisplay> {
   void filterNews(String query) {
     setState(() {
       currentQuery = query;
-      filteredNews = widget.news
-          .where((article) =>
-              article.title.toLowerCase().contains(query.toLowerCase()) ||
-              (article.summary != null &&
-                  article.summary!.toLowerCase().contains(query.toLowerCase())))
-          .toList();
+      filteredNews = SearchUtils.filterNews(widget.news,
+          query); // Использование функции поиска из отдельного файла
     });
   }
 
@@ -83,10 +82,8 @@ class _NewsDisplayState extends State<NewsDisplay> {
                 ],
               ),
             ),
-            // Виджет для вкладки "Блоги"
-            buildBlogTab(), // Вызов метода для создания виджета блогов
-            // Виджет для вкладки "О приложении"
-            buildAppInfoTab(), // Вызов метода для создания виджета информации о приложении
+            BlogDisplay(), // Виджет для вкладки "Блоги" из отдельного файла
+            AppInfoWidget(), // Виджет для вкладки "О приложении" из отдельного файла
           ],
         ),
         bottomNavigationBar: const TabBar(
@@ -99,49 +96,4 @@ class _NewsDisplayState extends State<NewsDisplay> {
       ),
     );
   }
-
-// Виджет для вкладки "Блоги"
-  Widget buildBlogTab() {
-    return ListView(
-      children: <Widget>[
-        ListTile(
-          title: const Text('Заголовок поста в блоге 1'),
-          subtitle: const Text('Краткое описание поста в блоге 1'),
-          onTap: () {
-            // Обработка нажатия на пост блога 1
-          },
-        ),
-        ListTile(
-          title: const Text('Заголовок поста в блоге 2'),
-          subtitle: const Text('Краткое описание поста в блоге 2'),
-          onTap: () {
-            // Обработка нажатия на пост блога 2
-          },
-          // Добавьте другие посты блога по аналогии
-        )
-      ],
-    );
-  }
-}
-
-// Виджет для вкладки "О приложении"
-Widget buildAppInfoTab() {
-  return const SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'О приложении',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'информацию о приложении, его возможностях, контактной информации и т.д.',
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ],
-    ),
-  );
 }
