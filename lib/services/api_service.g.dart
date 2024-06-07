@@ -28,7 +28,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) => Article(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       url: json['url'] as String,
-      imageUrl: json['imageUrl'] as String?,
+      imageUrl: json['image_url'] as String?,
       newsSite: json['newsSite'] as String?,
       summary: json['summary'] as String?,
       publishedAt: json['publishedAt'] == null
@@ -50,7 +50,7 @@ Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'url': instance.url,
-      'imageUrl': instance.imageUrl,
+      'image_url': instance.imageUrl,
       'newsSite': instance.newsSite,
       'summary': instance.summary,
       'publishedAt': instance.publishedAt?.toIso8601String(),
@@ -71,12 +71,12 @@ Map<String, dynamic> _$LaunchToJson(Launch instance) => <String, dynamic>{
     };
 
 Event _$EventFromJson(Map<String, dynamic> json) => Event(
-      eventId: (json['eventId'] as num).toInt(),
+      eventId: (json['event_id'] as num).toInt(),
       provider: json['provider'] as String,
     );
 
 Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
-      'eventId': instance.eventId,
+      'event_id': instance.eventId,
       'provider': instance.provider,
     };
 
@@ -99,9 +99,15 @@ class _ApiService implements ApiService {
   String? baseUrl;
 
   @override
-  Future<ArticleResponse> getArticles() async {
+  Future<ArticleResponse> getArticles(
+    int offset,
+    int limit,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'offset': offset,
+      r'limit': limit,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio

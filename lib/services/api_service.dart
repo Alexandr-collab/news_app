@@ -9,7 +9,8 @@ abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
   @GET("/v4/articles/")
-  Future<ArticleResponse> getArticles();
+  Future<ArticleResponse> getArticles(
+      @Query("offset") int offset, @Query('limit') int limit);
 
   @GET("/v4/articles/{id}/")
   Future<Article> getArticle(@Path("id") int id);
@@ -74,7 +75,7 @@ class Launch {
   Map<String, dynamic> toJson() => _$LaunchToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Event {
   int eventId;
   String provider;

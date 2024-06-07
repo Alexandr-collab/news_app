@@ -19,8 +19,7 @@ class AppInfoWidget extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              launch(
-                  'https://github.com/Alexandr-collab/news_app'); // Замените ссылку на ваш репозиторий GitHub
+              launch('https://github.com/Alexandr-collab/news_app');
             },
             child: const Text('Ссылка на GitHub'),
           ),
