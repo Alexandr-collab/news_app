@@ -27,7 +27,7 @@ Blog _$BlogFromJson(Map<String, dynamic> json) => Blog(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       url: json['url'] as String,
-      imageUrl: json['imageUrl'] as String?,
+      imageUrl: json['image_url'] as String?,
       newsSite: json['newsSite'] as String?,
       summary: json['summary'] as String?,
       publishedAt: json['publishedAt'] == null
@@ -49,7 +49,7 @@ Map<String, dynamic> _$BlogToJson(Blog instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'url': instance.url,
-      'imageUrl': instance.imageUrl,
+      'image_url': instance.imageUrl,
       'newsSite': instance.newsSite,
       'summary': instance.summary,
       'publishedAt': instance.publishedAt?.toIso8601String(),

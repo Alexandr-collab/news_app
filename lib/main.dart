@@ -1,39 +1,41 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'api_service.dart';
-import 'news_display.dart';
+import 'services/api_service.dart';
+import 'displays/news_display.dart';
+import 'displays/blog_display.dart';
+import 'displays/app_info_widget.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final ApiService apiService =
-      ApiService(Dio()); // Создаем экземпляр ApiService с Dio
+  final ApiService apiService = ApiService(Dio());
 
+  MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Space Flight News'),
-        ),
-        body: FutureBuilder<ArticleResponse>(
-          future: apiService.getArticles(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Ошибка при загрузке данных: ${snapshot.error}'),
-              ); // Отображаем сообщение об ошибке и информацию о причине
-            } else {
-              // Отображаем виджет для списка новостей
-              return snapshot.data != null
-                  ? NewsDisplay(snapshot.data!.results)
-                  : Container();
-            }
-          },
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Space Flight News'),
+          ),
+          body: TabBarView(
+            children: [
+              NewsDisplay(), // Передача apiService в NewsDisplay
+              BlogDisplay(),
+              AppInfoWidget(),
+            ],
+          ),
+          bottomNavigationBar: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.article), text: 'Новости'),
+              Tab(icon: Icon(Icons.book), text: 'Блоги'),
+              Tab(icon: Icon(Icons.info), text: 'О приложении'),
+            ],
+          ),
         ),
       ),
     );

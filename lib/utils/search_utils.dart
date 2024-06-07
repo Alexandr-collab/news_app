@@ -1,5 +1,5 @@
-import 'api_service.dart';
-import 'blog_service.dart';
+import '../services/api_service.dart';
+import '../services/blog_service.dart';
 
 class SearchUtils {
   static List<Article> filterNews(List<Article> news, String query) {

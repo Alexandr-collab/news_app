@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'BlogDetails.dart';
-import 'blog_service.dart'; // Импортируйте вашу реализацию BlogService
-import 'search_utils.dart'; // Импортируйте файл с функцией поиска
+import '../details/blog_detalis.dart';
+import '../services/blog_service.dart';
+import '../utils/search_utils.dart';
 
 class BlogDisplay extends StatefulWidget {
   @override
@@ -47,12 +47,11 @@ class _BlogDisplayState extends State<BlogDisplay> {
   }
 
   Future<void> _refreshBlogs() async {
-    // Очистите предыдущие данные и заново загрузите блоги
     setState(() {
-      _blogs = []; // Очистите список блогов
+      _blogs = []; // Очистить список блогов
       _offset = 0; // Сбросить смещение при обновлении
     });
-    await _loadBlogs(); // Заново загрузите блоги
+    await _loadBlogs();
   }
 
   void _filterBlogs(String query) async {
@@ -111,7 +110,6 @@ class _BlogDisplayState extends State<BlogDisplay> {
             GestureDetector(
               onVerticalDragUpdate: (details) {
                 if (details.primaryDelta! > 0) {
-                  // Свайп вниз
                   setState(() {
                     _currentSearchQuery = ''; // Очистка поисковой строки
                     _filteredBlogs =
@@ -134,17 +132,53 @@ class _BlogDisplayState extends State<BlogDisplay> {
                 itemCount: _filteredBlogs.length,
                 itemBuilder: (context, index) {
                   var blog = _filteredBlogs[index];
-                  return ListTile(
-                    title: Text(blog.title),
-                    subtitle: Text(blog.summary ?? ''),
+                  return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BlogDetails(blog),
+                          builder: (context) => BlogDetails(blog.id),
                         ),
                       );
                     },
+                    child: Container(
+                      padding: const EdgeInsets.all(
+                          8), // Добавьте отступы по вашему усмотрению
+                      child: Row(
+                        children: <Widget>[
+                          if (blog.imageUrl != null)
+                            Image.network(
+                              blog.imageUrl!,
+                              height: 80,
+                              width: 50,
+                              fit: BoxFit.cover,
+                            ),
+                          const SizedBox(
+                              width:
+                                  8), // Добавьте отступы между изображением и текстом
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  blog.title,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(
+                                    height:
+                                        4), // Добавьте вертикальные отступы по вашему усмотрению
+                                Text(
+                                  blog.summary ?? '',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
               ),
